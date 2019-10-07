@@ -25,13 +25,16 @@ json_data2 = json.loads(response2.text)
 for item in json_data2:
     if item['software'] == "Kubernetes":
         version_lord_latest_version = item['current_version']
-        print(f"Current version on Version Lord is {version_lord_latest_version}")
-        data = {'current_version': github_latest_version, 'software': 'Kubernetes'}
-        requests.put(url=kubernetes_url, data=data)
-        payload = requests.put(url=kubernetes_url, data=json.dumps(data), headers={'Content-Type': 'application/json'})
-        print (payload.status_code)
-        print(payload.content)
-        #print(f"New Version Lord value is {github_latest_version}")
+        if version_lord_latest_version == github_latest_version:
+            print("Version Lord is up to date with Github")
+            break
+        else:
+            print("Version Lord is not up to date with Github")
+            data = {'current_version': github_latest_version, 'software': 'Kubernetes'}
+            requests.put(url=kubernetes_url, data=data)
+            payload = requests.put(url=kubernetes_url, data=json.dumps(data), headers={'Content-Type': 'application/json'})
+            print (payload.status_code)
+            print(payload.content)
 
 
 #part 3: compare and make a decision
